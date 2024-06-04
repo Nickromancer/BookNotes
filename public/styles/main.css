@@ -1,0 +1,56 @@
+.NavBar {
+  margin: 0;
+  background-color: #afd198;
+  height: 5rem;
+}
+
+body {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container--title {
+  font-size: 5rem;
+}
+
+.container--button {
+  width: 10rem;
+  height: 3rem;
+  margin-bottom: 2rem;
+}
+
+.bookGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 10rem;
+  margin-top: 3rem;
+}
+
+.bookGrid > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #afd198;
+  width: 200px;
+  height: auto;
+  padding: 10px;
+}
+
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+textarea {
+  resize: none;
+}

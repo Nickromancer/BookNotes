@@ -3,7 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/main.css" />
     <title>Book Notes</title>
   </head>
-  <body></body>
+  <body>
+    <div class="NavBar">
+      <form action="/login">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" />
+        <label for="password">Password:</label>
+        <input type="text" name="password" />
+        <input type="submit" value="Sign In" />
+      </form>
+    </div>
+    <div class="container">
+      <h1 class="container--title">Book Notes</h1>
+      <button class="container--button">New Book</button>
+    </div>
+
+    <div class="container">
+      <form action="/add" method="post">
+        <div class="flex">
+          <div>
+            <label for="isbn">ISBN:</label> <br />
+            <input type="text" name="isbn" /> <br />
+          </div>
+          <div>
+            <label for="rating">Rating:</label> <br />
+            <input type="number" name="rating" min="0" max="5" /> <br />
+          </div>
+        </div>
+        <label for="notes" style="margin-top: 4rem">Notes:</label> <br />
+        <textarea
+          name="notes"
+          id="notes"
+          maxlength="200"
+          rows="5"
+          cols="50"
+        ></textarea>
+        <br />
+        <input type="submit" value="Add Book" />
+      </form>
+    </div>
+    <hr />
+
+    <div class="container">
+      <div class="bookGrid">
+        <% for (let book of listBooks) { %>
+        <div>
+          <img
+            src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg"
+          />
+          <br />
+          <p>Rating: <%= book.rating %></p>
+          <br />
+          <p>Notes: <%= book.notes %></p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </body>
 </html>
