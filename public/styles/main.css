@@ -1,7 +1,16 @@
 .NavBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   margin: 0;
   background-color: #afd198;
   height: 5rem;
+  padding-left: 1rem;
+}
+
+.NavBar--forms {
+  display: flex;
+  gap: 1rem;
 }
 
 body {
@@ -34,6 +43,7 @@ p {
   grid-template-rows: auto;
   gap: 10rem;
   margin-top: 3rem;
+  padding-bottom: 2rem;
 }
 
 .bookGrid > div {

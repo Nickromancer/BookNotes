@@ -8,17 +8,31 @@
   </head>
   <body>
     <div class="NavBar">
-      <form action="/login">
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" />
-        <label for="password">Password:</label>
-        <input type="text" name="password" />
-        <input type="submit" value="Sign In" />
+      <% if (locals.name) {%>
+      <p>User: <%= locals.name%></p>
+      <% } %>
+      <form class="NavBar--forms" action="/login">
+        <% if (!locals.name) {%>
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" name="name" id="name" required />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="text" name="password" required />
+        </div>
+        <div>
+          <input type="submit" value="Login" />
+          <input type="submit" formaction="signup" value="Sign-up" />
+          <% } else { %>
+          <input type="submit" formaction="signout" value="Sign-out" />
+          <% } %>
+        </div>
       </form>
+      <div></div>
     </div>
     <div class="container">
       <h1 class="container--title">Book Notes</h1>
-      <button class="container--button">New Book</button>
     </div>
 
     <div class="container">
@@ -41,6 +55,9 @@
           rows="5"
           cols="50"
         ></textarea>
+        <% if (locals.error) {%>
+        <p>Error: <%= locals.error %></p>
+        <% } %>
         <br />
         <input type="submit" value="Add Book" />
       </form>
@@ -54,10 +71,20 @@
           <img
             src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg"
           />
-          <br />
-          <p>Rating: <%= book.rating %></p>
-          <br />
-          <p>Notes: <%= book.notes %></p>
+          <form action="/edit">
+            <label for="rating">Rating: </label>
+            <input type="number" name="rating" value="<%= book.rating %>" />
+            <label for="notes">Notes:</label> <br />
+            <input
+              type="text"
+              name="notes"
+              value="<%= book.notes  %>"
+              required
+            />
+            <input type="hidden" name="isbn" value="<%= book.isbn %>" />
+            <input type="submit" value="Edit" />
+            <input type="submit" formaction="/delete" value="Delete" />
+          </form>
         </div>
         <% } %>
       </div>
