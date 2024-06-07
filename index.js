@@ -5,6 +5,7 @@ import axios from "axios";
 const app = express();
 const port = 3000;
 
+// Create a connection to the database
 const db = new pg.Client({
   user: "postgres",
   host: "localhost",
@@ -18,13 +19,27 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+// manages userID, name and sorting for books
 let userId = -1;
 let userName;
+let sort;
 
+//called with fetching books from database, also with sorting
 async function getUserBooks() {
-  const result = await db.query("SELECT * FROM books WHERE user_id = $1", [
-    userId,
-  ]);
+  let result;
+  if (sort == "ratinglow") {
+    result = await db.query(
+      "SELECT * FROM books WHERE user_id = $1 ORDER BY books.rating ASC",
+      [userId]
+    );
+  } else if (sort == "ratinghigh") {
+    result = await db.query(
+      "SELECT * FROM books WHERE user_id = $1 ORDER BY books.rating DESC",
+      [userId]
+    );
+  } else {
+    result = await db.query("SELECT * FROM books WHERE user_id = $1", [userId]);
+  }
   let books = [];
   result.rows.forEach((book) => {
     books.push(book);
@@ -32,10 +47,7 @@ async function getUserBooks() {
   return books;
 }
 
-async function editBook() {
-  console.log("Hello");
-}
-
+// homepage
 app.get("/", async (req, res) => {
   const books = await getUserBooks();
   res.render("index.ejs", {
@@ -44,6 +56,7 @@ app.get("/", async (req, res) => {
   });
 });
 
+// login with name and password
 app.get("/login", async (req, res) => {
   try {
     const name = req.query.name;
@@ -67,12 +80,14 @@ app.get("/login", async (req, res) => {
   }
 });
 
+//allows user to sign out of website
 app.get("/signout", (req, res) => {
   userId = -1;
   userName = "";
   res.redirect("/");
 });
 
+//allows user to sign into website and adds user to database
 app.get("/signup", async (req, res) => {
   const name = req.query.name;
   const password = req.query.password;
@@ -98,6 +113,7 @@ app.get("/signup", async (req, res) => {
   }
 });
 
+//adds a book based on its ISBN code, also includes rating and notes from user
 app.post("/add", async (req, res) => {
   const isbn = parseInt(req.body.isbn);
   const rating = parseInt(req.body.rating);
@@ -122,6 +138,7 @@ app.post("/add", async (req, res) => {
   }
 });
 
+//Delete a book from a user
 app.get("/delete", async (req, res) => {
   const isbn = req.query.isbn;
   try {
@@ -136,6 +153,7 @@ app.get("/delete", async (req, res) => {
   }
 });
 
+//Change infomation such as rating or notes, updates the database entry
 app.get("/edit", async (req, res) => {
   const isbn = req.query.isbn;
   const rating = req.query.rating;
@@ -145,6 +163,13 @@ app.get("/edit", async (req, res) => {
     notes,
     isbn,
   ]);
+  res.redirect("/");
+});
+
+//Sort the books according to rating, ascending or descending
+app.get("/sort", async (req, res) => {
+  const sorting = req.query.sorts;
+  sort = sorting;
   res.redirect("/");
 });
 

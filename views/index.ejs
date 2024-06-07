@@ -65,6 +65,13 @@
     <hr />
 
     <div class="container">
+      <form action="/sort">
+        <select name="sorts" data-placeholder="Filter by..." id="sorts">
+          <option value="ratinglow">Rating Low > High</option>
+          <option value="ratinghigh">Rating High > Low</option>
+          <input type="submit" value="Sort" />
+        </select>
+      </form>
       <div class="bookGrid">
         <% for (let book of listBooks) { %>
         <div>
